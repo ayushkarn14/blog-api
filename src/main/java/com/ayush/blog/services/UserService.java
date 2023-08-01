@@ -3,8 +3,6 @@ package com.ayush.blog.services;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-import com.ayush.blog.entities.User;
 import com.ayush.blog.payloads.UserDto;
 
 @Service

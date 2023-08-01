@@ -4,12 +4,15 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ayush.blog.entities.Category;
 import com.ayush.blog.exceptions.ResourceNotFoundException;
 import com.ayush.blog.payloads.CategoryDto;
 import com.ayush.blog.repositories.CategoryRepo;
 import com.ayush.blog.services.CategoryService;
+
+@Service
 public class CategoryServiceImpl implements CategoryService{
 
 	@Autowired
@@ -43,16 +46,16 @@ public class CategoryServiceImpl implements CategoryService{
 
 	@Override
 	public CategoryDto getCategory(Integer categoryId) {
-		Category category=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "CategoryId", categoryId));\
+		Category category=this.categoryRepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category", "CategoryId", categoryId));
 		
-		return this.modelMapper.map(categoryId, CategoryDto.class);
+		return this.modelMapper.map(category, CategoryDto.class);
 	}
 
 	@Override
 	public List<CategoryDto> getCategories() {
 		List<Category> categories=this.categoryRepo.findAll();
 		
-		List<CategoryDto> categoryDtos = categories.stream().map((category)->this.modelMapper.map(category, CategoryDto.class)).collect(Collectors.toList()));
+		List<CategoryDto> categoryDtos = categories.stream().map((category)->this.modelMapper.map(category, CategoryDto.class)).collect(Collectors.toList());
 		return categoryDtos;
 	}
 	

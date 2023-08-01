@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ayush.blog.payloads.ApiResponse;
 import com.ayush.blog.payloads.CategoryDto;
-import com.ayush.blog.payloads.UserDto;
 import com.ayush.blog.services.CategoryService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -28,15 +29,15 @@ public class CategoryController {
 	
 	//create
 	@PostMapping("/")
-	public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
+	public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
 		CategoryDto createdCategory=this.categoryService.createCategory(categoryDto);
 		
-		return new ResponseEntity<CategoryDto>(createdCategory, HttpStatus.CREATED);
+		return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
 	}
 	
 	//update
 	@PutMapping("/{categoryId}")
-	public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId){
+	public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId){
 		CategoryDto updatedCategory= this.categoryService.updateCategory(categoryDto, categoryId);
 		return new ResponseEntity<CategoryDto>(updatedCategory,HttpStatus.OK);
 	}
@@ -48,7 +49,14 @@ public class CategoryController {
 		return new ResponseEntity<ApiResponse>(new ApiResponse("Category Deleted Successfully", true), HttpStatus.OK);
 	}
 	
-	//GET - get user
+	//GET - get one
+	@GetMapping("/{categoryId}")
+	public ResponseEntity<CategoryDto> getCategory(@PathVariable Integer categoryId){
+		CategoryDto categoryDto=this.categoryService.getCategory(categoryId);
+		return new ResponseEntity<CategoryDto>(categoryDto,HttpStatus.OK);
+	}
+	
+	//GET - get all
 	@GetMapping("/")
 	public ResponseEntity<List<CategoryDto>> getAllCategories(){
 		return ResponseEntity.ok(this.categoryService.getCategories());
